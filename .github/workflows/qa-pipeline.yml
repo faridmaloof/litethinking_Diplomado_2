@@ -59,3 +59,11 @@ jobs:
           cd Semana_3/dia-4-kafka-docker/tests
           # La herramienta 'allurectl watch' intercepta la consola y envía reportes en tiempo real
           allurectl watch -- npx playwright test
+          
+  pepe-job:
+    name: Job de Prueba Adicional
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Paso de Ejemplo
+        run: echo "Este es un job adicional para demostrar múltiples jobs en el pipeline"
