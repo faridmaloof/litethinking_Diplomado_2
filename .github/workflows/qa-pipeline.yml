@@ -44,22 +44,12 @@ jobs:
           node worker.js &
           sleep 5
 
-      - name: 7. Instalar Utilidad AllureCTL (Allure TestOps)
-        run: |
-          wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O allurectl
-          chmod +x allurectl
-          sudo mv allurectl /usr/local/bin/
-
-      - name: 8. Ejecutar Pruebas y Transmitir Resultados a Allure TestOps
-        env:
-          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
-          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
-          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+      - name: 7. Ejecutar Pruebas y Transmitir Resultados a Allure TestOps
         run: |
           cd Semana_3/dia-4-kafka-docker/tests
           # La herramienta 'allurectl watch' intercepta la consola y envía reportes en tiempo real
-          allurectl watch -- npx playwright test
-          
+          npx playwright test
+
   pepe-job:
     name: Job de Prueba Adicional
     runs-on: ubuntu-latest
