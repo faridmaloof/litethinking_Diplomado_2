@@ -22,24 +22,24 @@ jobs:
 
       - name: 3. Levantar Infraestructura de Kafka (Docker)
         run: |
-          docker compose -f dia-4-kafka-docker/docker-compose.yml up -d
+          docker compose -f Semana_3/dia-4-kafka-docker/docker-compose.yml up -d
           echo "Esperando que Kafka-Broker esté completamente inicializado..."
           sleep 15
 
       - name: 4. Instalar Dependencias de la Aplicación
         run: |
-          cd dia-4-kafka-docker/app
+          cd Semana_3/dia-4-kafka-docker/app
           npm install
 
       - name: 5. Instalar Dependencias de Pruebas (Playwright)
         run: |
-          cd dia-4-kafka-docker/tests
+          cd Semana_3/dia-4-kafka-docker/tests
           npm install
           npx playwright install --with-deps
 
       - name: 6. Lanzar Aplicación y Consumidor en Segundo Plano
         run: |
-          cd dia-4-kafka-docker/app
+          cd Semana_3/dia-4-kafka-docker/app
           node server.js &
           node worker.js &
           sleep 5
@@ -56,6 +56,6 @@ jobs:
           ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
           ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
         run: |
-          cd dia-4-kafka-docker/tests
+          cd Semana_3/dia-4-kafka-docker/tests
           # La herramienta 'allurectl watch' intercepta la consola y envía reportes en tiempo real
           allurectl watch -- npx playwright test
