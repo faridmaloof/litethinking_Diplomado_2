@@ -1,0 +1,61 @@
+name: Lite Thinking QA TestOps Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  run-automation-suite:
+    name: Ejecución de Pruebas y Reporte
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar Código del Repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Entorno Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 3. Levantar Infraestructura de Kafka (Docker)
+        run: |
+          docker-compose -f dia-4-kafka-docker/docker-compose.yml up -d
+          echo "Esperando que Kafka-Broker esté completamente inicializado..."
+          sleep 15
+
+      - name: 4. Instalar Dependencias de la Aplicación
+        run: |
+          cd dia-4-kafka-docker/app
+          npm install
+
+      - name: 5. Instalar Dependencias de Pruebas (Playwright)
+        run: |
+          cd dia-4-kafka-docker/tests
+          npm install
+          npx playwright install --with-deps
+
+      - name: 6. Lanzar Aplicación y Consumidor en Segundo Plano
+        run: |
+          cd dia-4-kafka-docker/app
+          node server.js &
+          node worker.js &
+          sleep 5
+
+      - name: 7. Instalar Utilidad AllureCTL (Allure TestOps)
+        run: |
+          wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O allurectl
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
+
+      - name: 8. Ejecutar Pruebas y Transmitir Resultados a Allure TestOps
+        env:
+          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+        run: |
+          cd dia-4-kafka-docker/tests
+          # La herramienta 'allurectl watch' intercepta la consola y envía reportes en tiempo real
+          allurectl watch -- npx playwright test
