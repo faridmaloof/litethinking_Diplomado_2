@@ -5,6 +5,7 @@
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
+    "install:browsers:ci": "playwright install --with-deps",
     "test:ui-polling": "playwright test -g \"TestPlan UI Polling\"",
     "test:api-pool": "playwright test -g \"TestPlan API\"",
     "test:distribucion": "playwright test -g \"TestPlan Distribución\"",

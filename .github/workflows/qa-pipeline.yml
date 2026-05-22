@@ -10,6 +10,9 @@ jobs:
   run-automation-suite:
     name: Ejecución de Pruebas y Reporte
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Semana_3/dia-4-kafka-docker
 
     steps:
       - name: 1. Descargar Código del Repositorio
@@ -22,38 +25,31 @@ jobs:
 
       - name: 3. Levantar Infraestructura de Kafka (Docker)
         run: |
-          docker compose -f Semana_3/dia-4-kafka-docker/docker-compose.yml up -d
-          echo "Esperando que Kafka-Broker esté completamente inicializado..."
-          sleep 15
+          docker compose up -d
+          echo "Esperando que Kafka-Broker esté listo..."
+          timeout 120 bash -c 'until docker compose exec -T kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list >/dev/null 2>&1; do sleep 2; done'
 
       - name: 4. Instalar Dependencias de la Aplicación
         run: |
-          cd Semana_3/dia-4-kafka-docker/app
-          npm install
+          cd backend
+          npm ci
 
       - name: 5. Instalar Dependencias de Pruebas (Playwright)
         run: |
-          cd Semana_3/dia-4-kafka-docker/tests
-          npm install
-          npx playwright install --with-deps
+          cd tests
+          npm ci
+          npm run install:browsers:ci
 
       - name: 6. Lanzar Aplicación y Consumidor en Segundo Plano
         run: |
-          cd Semana_3/dia-4-kafka-docker/app
-          node server.js &
-          node worker.js &
-          sleep 5
+          cd backend
+          npm run start-server > server.log 2>&1 &
+          npm run start-worker > worker.log 2>&1 &
+          echo "Esperando endpoint de salud del backend..."
+          timeout 120 bash -c 'until curl -fsS http://localhost:3000/health >/dev/null; do sleep 2; done'
 
-      - name: 7. Ejecutar Pruebas y Transmitir Resultados a Allure TestOps
+      - name: 7. Ejecutar pruebas Playwright
         run: |
-          cd Semana_3/dia-4-kafka-docker/tests
-          # La herramienta 'allurectl watch' intercepta la consola y envía reportes en tiempo real
-          npx playwright test
+          cd tests
+          npm run test
 
-  pepe-job:
-    name: Job de Prueba Adicional
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Paso de Ejemplo
-        run: echo "Este es un job adicional para demostrar múltiples jobs en el pipeline"
