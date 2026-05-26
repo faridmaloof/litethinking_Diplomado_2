@@ -1,0 +1,16 @@
+{
+  "@timestamp": "2026-05-25T15:30:16.452Z",
+  "level": "FATAL",
+  "service_name": "payments-microservice",
+  "trace_id": "trace-99x88y77z",
+  "span_id": "span-445566",
+  "user_id": "Juan_123",
+  "event_action": "process_kafka_transfer",
+  "transaction_amount": 500.0,
+  "error_details": {
+    "error_type": "NullPointerException",
+    "file": "TransactionValidator.java",
+    "line": 142,
+    "message": "Fallo al leer la cuenta de destino: Campo 'target_account' viene nulo desde el Frontend"
+  }
+}

@@ -1,0 +1,10 @@
+{"timestamp":"2026-05-26T14:05:01.102Z","level":"INFO","service":"frontend","trace_id":"trace-final-1044","user_id":"Ana_204","event":"submit_transfer","amount":75.00,"target_account":"ACC-5501"}
+{"timestamp":"2026-05-26T14:05:01.221Z","level":"INFO","service":"api-gateway","trace_id":"trace-final-1044","user_id":"Ana_204","event":"transfer_accepted","status_code":202}
+{"timestamp":"2026-05-26T14:05:11.772Z","level":"INFO","service":"payments-microservice","trace_id":"trace-final-1044","user_id":"Ana_204","event":"transfer_processed","status":"APPROVED"}
+{"timestamp":"2026-05-26T14:07:43.441Z","level":"INFO","service":"frontend","trace_id":"trace-final-7731","user_id":"Mario_778","event":"submit_transfer","amount":1200.00,"target_account":"ACC-9010"}
+{"timestamp":"2026-05-26T14:07:43.610Z","level":"INFO","service":"api-gateway","trace_id":"trace-final-7731","user_id":"Mario_778","event":"transfer_accepted","status_code":202}
+{"timestamp":"2026-05-26T14:07:50.018Z","level":"INFO","service":"payments-microservice","trace_id":"trace-final-7731","user_id":"Mario_778","event":"transfer_processed","status":"APPROVED"}
+{"timestamp":"2026-05-26T14:07:50.119Z","level":"FATAL","service":"notifications-service","trace_id":"trace-final-7731","span_id":"span-final-991","user_id":"Mario_778","event":"send_receipt","error_type":"SchemaValidationError","file":"ReceiptPayloadMapper.ts","line":88,"message":"No se puede enviar comprobante: campo 'email' no existe en el evento transfer_processed","root_cause":"missing_email"}
+{"timestamp":"2026-05-26T14:10:02.003Z","level":"INFO","service":"frontend","trace_id":"trace-final-5520","user_id":"Luisa_510","event":"submit_transfer","amount":25.00,"target_account":"ACC-3320"}
+{"timestamp":"2026-05-26T14:10:02.119Z","level":"WARN","service":"api-gateway","trace_id":"trace-final-5520","user_id":"Luisa_510","event":"rate_limit_check","message":"Usuario cerca del limite diario"}
+{"timestamp":"2026-05-26T14:10:06.220Z","level":"INFO","service":"payments-microservice","trace_id":"trace-final-5520","user_id":"Luisa_510","event":"transfer_processed","status":"APPROVED"}
