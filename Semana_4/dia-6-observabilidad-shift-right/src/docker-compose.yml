@@ -1,0 +1,105 @@
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: observability_lab
+      POSTGRES_USER: observability
+      POSTGRES_PASSWORD: observability
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  kafka-broker:
+    build:
+      context: ./kafka
+    container_name: kafka-broker
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      DATA_DIR: /app/data
+    volumes:
+      - kafka-data:/app/data
+
+  auth-service:
+    build:
+      context: ./backend
+    container_name: auth-service
+    command: node src/auth-service.js
+    environment:
+      PORT: 3001
+      SERVICE_NAME: auth-service
+      DATABASE_URL: postgresql://observability:observability@postgres-db:5432/observability_lab
+      LOG_DIR: /app/logs
+    depends_on:
+      - postgres-db
+    volumes:
+      - logs:/app/logs
+
+  api-gateway:
+    build:
+      context: ./backend
+    container_name: api-gateway
+    command: node src/index.js
+    environment:
+      PORT: 3000
+      SERVICE_NAME: api-gateway
+      AUTH_URL: http://auth-service:3001
+      KAFKA_URL: http://kafka-broker:3002
+      KAFKA_TOPIC: transfer-events
+      DATABASE_URL: postgresql://observability:observability@postgres-db:5432/observability_lab
+      LOG_DIR: /app/logs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres-db
+      - kafka-broker
+      - auth-service
+    volumes:
+      - logs:/app/logs
+
+  payments-microservice:
+    build:
+      context: ./backend
+    container_name: payments-microservice
+    command: node src/worker.js
+    environment:
+      SERVICE_NAME: payments-microservice
+      KAFKA_URL: http://kafka-broker:3002
+      KAFKA_TOPIC: transfer-events
+      DATABASE_URL: postgresql://observability:observability@postgres-db:5432/observability_lab
+      LOG_DIR: /app/logs
+    depends_on:
+      - postgres-db
+      - kafka-broker
+      - api-gateway
+    volumes:
+      - logs:/app/logs
+
+  observability-console:
+    build:
+      context: ./observability
+    container_name: observability-console
+    environment:
+      PORT: 4000
+      LOG_DIR: /app/logs
+    ports:
+      - "4000:4000"
+    volumes:
+      - logs:/app/logs
+
+  frontend-web:
+    build:
+      context: ./frontend
+    container_name: frontend-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api-gateway
+      - observability-console
+
+volumes:
+  pg-data:
+  logs:
+  kafka-data:

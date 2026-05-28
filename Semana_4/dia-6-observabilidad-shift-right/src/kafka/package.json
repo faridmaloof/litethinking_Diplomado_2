@@ -1,0 +1,11 @@
+{
+  "name": "dia-6-lab-broker",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

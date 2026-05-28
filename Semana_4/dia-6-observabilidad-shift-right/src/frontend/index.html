@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laboratorio de Observabilidad</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Semana 4 - Dia 6</p>
+          <h1>Laboratorio de observabilidad y shift-right</h1>
+          <p class="lede">
+            Simula transferencias, genera trazas y localiza el fallo en frontend, backend,
+            Kafka o base de datos.
+          </p>
+        </div>
+        <div class="trace-card">
+          <span>Trace actual</span>
+          <strong id="traceId">trace-pendiente</strong>
+          <button id="newTrace" type="button">Generar nuevo trace</button>
+          <a id="observabilityLink" href="/observability/" target="_blank" rel="noreferrer">Abrir observabilidad</a>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <form id="transferForm" class="panel form-panel">
+          <h2>Ejecutar transferencia</h2>
+
+          <div class="case-toolbar" aria-label="Casos guiados">
+            <button type="button" class="case-button" data-scenario="happy">Caso feliz</button>
+            <button type="button" class="case-button" data-scenario="frontend">Fallo frontend</button>
+            <button type="button" class="case-button" data-scenario="backend">Fallo backend</button>
+            <button type="button" class="case-button" data-scenario="kafka">Fallo Kafka</button>
+            <button type="button" class="case-button" data-scenario="db">Fallo BD</button>
+          </div>
+
+          <label>
+            Usuario
+            <input id="userId" name="userId" value="Juan_123" />
+          </label>
+
+          <label>
+            Cuenta origen
+            <input id="sourceAccount" name="sourceAccount" value="ACC-001" />
+          </label>
+
+          <label>
+            Cuenta destino
+            <input id="targetAccount" name="targetAccount" value="ACC-002" />
+          </label>
+
+          <label>
+            Monto
+            <input id="amount" name="amount" type="number" min="1" step="0.01" value="500" />
+          </label>
+
+          <label>
+            Escenario de laboratorio
+            <select id="scenario" name="scenario">
+              <option value="happy">Happy path</option>
+              <option value="frontend">Fallo en frontend</option>
+              <option value="backend">Fallo en backend</option>
+              <option value="kafka">Fallo en Kafka</option>
+              <option value="db">Fallo en base de datos</option>
+            </select>
+          </label>
+
+          <button type="submit">Procesar transferencia</button>
+        </form>
+
+        <aside class="panel story-panel">
+          <h2>Mapa del incidente</h2>
+          <ul>
+            <li>Frontend envía la solicitud con trace id.</li>
+            <li>Gateway autentica la petición y la publica en Kafka.</li>
+            <li>Payments worker procesa el evento y persiste el resultado.</li>
+            <li>Observability app filtra logs por trace_id, servicio y nivel.</li>
+          </ul>
+
+          <div class="sample-traces">
+            <span>Escenario ejemplo</span>
+            <p>trace-99x88y77z</p>
+            <small>Usa este valor en la consola del laboratorio para seguir el caso guía.</small>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel result-panel">
+        <h2>Resultado</h2>
+        <pre id="result">Listo para ejecutar la primera transferencia.</pre>
+      </section>
+    </main>
+
+    <script src="/main.js"></script>
+  </body>
+</html>

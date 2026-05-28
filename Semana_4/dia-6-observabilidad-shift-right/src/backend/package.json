@@ -1,0 +1,14 @@
+{
+  "name": "dia-6-observabilidad-backend",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start:gateway": "node src/index.js",
+    "start:auth": "node src/auth-service.js",
+    "start:worker": "node src/worker.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}
