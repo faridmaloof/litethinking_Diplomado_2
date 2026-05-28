@@ -7,7 +7,7 @@ test.describe('Public API examples', () => {
     expect(response.ok()).toBeTruthy();
     expect(response.status()).toBe(200);
 
-    const data = await response.json();
+    const data = await response;
     expect(data.id).toBe(1);
     expect(data.title).toBeTruthy();
   });

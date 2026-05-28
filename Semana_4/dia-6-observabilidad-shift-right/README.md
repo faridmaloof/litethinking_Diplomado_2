@@ -7,6 +7,7 @@ Incluye:
 - Laboratorio forense: La Caza del Bug.
 - Recursos de trazas y logs JSON.
 - Taller teorico con solucionario.
+- Stack ejecutable en [src](src) con frontend, backend, Kafka, PostgreSQL y consola de observabilidad.
 
 ## Objetivo de aprendizaje
 
@@ -69,3 +70,16 @@ Usa [recursos/reporte-bug-template.md](recursos/reporte-bug-template.md) para qu
 
 El taller esta en [taller-teorico-dia-6.md](taller-teorico-dia-6.md).
 El solucionario para el instructor esta en [solucionario-dia-6.md](solucionario-dia-6.md).
+
+## Stack ejecutable
+
+La demo completa esta en [src](src). Desde ahi puedes levantar todo con:
+
+```bash
+docker compose up --build
+```
+
+Luego abre:
+
+- Frontend: http://localhost:8080
+- Observabilidad: http://localhost:8080/observability/

@@ -21,7 +21,8 @@ form.addEventListener('submit', event => {
   updateStatus('processing', 'Procesando...');
 
   // Simulación asíncrona para practicar polling en UI tests.
+  const waitTime = Math.floor(Math.random() * 11000) + 1000;
   window.setTimeout(() => {
     updateStatus('success', 'Usuario Creado Exitosamente');
-  }, 2000);
+  }, waitTime);
 });
